@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { disabled } from '@angular/forms/signals';
 
 @Component({
@@ -15,6 +15,9 @@ export class Labs {
     "Aprender HTML",
     "Aprender CSS"
   ]
+
+  testSignal = signal("Hello, Signal!");
+
   person = {
     name: "John Doe",
     age: 30,
@@ -24,5 +27,14 @@ export class Labs {
 
   clickHandler() {
     alert("Button clicked!");
+  }
+
+  changeHandler(event: Event) {
+    console.log("Input changed:", (event.target as HTMLInputElement).value);
+  }
+
+  signalHandler(event: Event) {
+    const text = (event.target as HTMLInputElement).value;
+    this.testSignal.set(text);
   }
 }

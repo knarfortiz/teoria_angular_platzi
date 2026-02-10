@@ -1,5 +1,12 @@
 <p>labs works!</p>
 
+<h2>signal</h2>
+<p>{{ testSignal() }}</p>
+<input (keydown)="signalHandler($event)" type="text" name="" id="" [value]="person.name">
+
+
+<hr>
+
 <ul>
   @for (task of tasks; track $index) {
     <li>{{ task }}</li>
@@ -14,3 +21,13 @@
 <hr>
 
 <button (click)="clickHandler()">Click me</button>
+<button (dblclick)="clickHandler()">Double click me</button>
+<p>
+  change: 
+  <input (change)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
+</p>
+<p>
+  keydown: 
+  <input (keydown)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
+</p>
+
