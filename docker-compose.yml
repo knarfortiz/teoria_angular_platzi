@@ -1,0 +1,18 @@
+services:
+  angular:
+    image: angular-dev
+    build: .
+    container_name: angular-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./app:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NG_CLI_ANALYTICS=false
+      - CI=true
+    tty: true
+    stdin_open: true
+
+volumes:
+  node_modules:

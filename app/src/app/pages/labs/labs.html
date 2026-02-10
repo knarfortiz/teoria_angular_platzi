@@ -1,0 +1,16 @@
+<p>labs works!</p>
+
+<ul>
+  @for (task of tasks; track $index) {
+    <li>{{ task }}</li>
+  }
+</ul>
+
+<hr>
+
+<input type="text" name="" id="" [value]="person.name">
+<button [disabled]="person.disabled">click me</button>
+
+<hr>
+
+<button (click)="clickHandler()">Click me</button>
