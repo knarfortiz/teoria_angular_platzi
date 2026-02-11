@@ -1,33 +1,34 @@
-<p>labs works!</p>
+<div class="container">
+  <p>labs works!</p>
 
-<h2>signal</h2>
-<p>{{ testSignal() }}</p>
-<input (keydown)="signalHandler($event)" type="text" name="" id="" [value]="person.name">
+  <h2>signal</h2>
+  <p>{{ testSignal() }}</p>
+  <input (keydown)="signalHandler($event)" type="text" name="" id="" [value]="person.name">
 
 
-<hr>
+  <hr>
 
-<ul>
-  @for (task of tasks; track $index) {
-    <li>{{ task }}</li>
-  }
-</ul>
+  <ul>
+    @for (task of tasks(); track $index) {
+    <li>{{ $index }} - {{ task }}</li>
+    }
+  </ul>
 
-<hr>
+  <hr>
 
-<input type="text" name="" id="" [value]="person.name">
-<button [disabled]="person.disabled">click me</button>
+  <input type="text" name="" id="" [value]="person.name">
+  <button [disabled]="person.disabled">click me</button>
 
-<hr>
+  <hr>
 
-<button (click)="clickHandler()">Click me</button>
-<button (dblclick)="clickHandler()">Double click me</button>
-<p>
-  change: 
-  <input (change)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
-</p>
-<p>
-  keydown: 
-  <input (keydown)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
-</p>
-
+  <button (click)="clickHandler()">Click me</button>
+  <button (dblclick)="clickHandler()">Double click me</button>
+  <p>
+    change:
+    <input (change)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
+  </p>
+  <p>
+    keydown:
+    <input (keydown)="changeHandler($event)" type="text" name="" id="" [value]="person.name">
+  </p>
+</div>

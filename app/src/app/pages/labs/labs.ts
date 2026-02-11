@@ -8,13 +8,13 @@ import { disabled } from '@angular/forms/signals';
   styleUrl: './labs.scss',
 })
 export class Labs {
-  tasks = [
+  tasks = signal([
     "Aprender Angular",
     "Aprender TypeScript",
     "Aprender JavaScript",
     "Aprender HTML",
     "Aprender CSS"
-  ]
+  ]);
 
   testSignal = signal("Hello, Signal!");
 
