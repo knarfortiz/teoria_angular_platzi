@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { disabled } from '@angular/forms/signals';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-labs',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './labs.html',
   styleUrl: './labs.scss',
 })
@@ -15,6 +15,14 @@ export class Labs {
     "Aprender HTML",
     "Aprender CSS"
   ]);
+
+  colorControl = new FormControl();
+
+  constructor() {
+    this.colorControl.valueChanges.subscribe(value => {
+      console.log("Selected color:", value);
+    });
+  }
 
   testSignal = signal("Hello, Signal!");
 

@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { Task } from '../../models/task';
 import { JsonPipe } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-home',
-  imports: [JsonPipe],
+  imports: [JsonPipe, ReactiveFormsModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -17,6 +18,26 @@ export class Home {
     { id: 5, title: "Aprender CSS", completed: false }
   ]);
 
+  newTaskCtrl = new FormControl('',
+    {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern(/^\S.*\S$|^\S$/)
+      ]
+    });
+
+  updateTaskCtrl = new FormControl('',
+    {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern(/^\S.*\S$|^\S$/)
+      ]
+    });
+
   public completeTaskHandler(index: number) {
     this.tasks.update(tasks => {
       const updatedTasks = [...tasks];
@@ -25,11 +46,20 @@ export class Home {
     });
   }
 
-  public addTaskHandler(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.trim();
-    this.addTask(value);
-    input.value = '';
+  public addTaskHandler() {
+    if (this.newTaskCtrl.invalid) { return; }
+    this.addTask(this.newTaskCtrl.value);
+    this.newTaskCtrl.setValue('');
+  }
+
+  public updateTaskHandler(index: number) {
+    if (this.updateTaskCtrl.invalid) { return; }
+    this.tasks.update(tasks => {
+      const updatedTasks = [...tasks];
+      updatedTasks[index].title = this.updateTaskCtrl.value;
+      updatedTasks[index].editing = false;
+      return updatedTasks;
+    });
   }
 
   public addTask(title: string) {
@@ -43,5 +73,18 @@ export class Home {
 
   public removeTask(index: number) {
     this.tasks.update(tasks => tasks.filter((_, i) => i !== index));
+  }
+
+  public editingMode(index: number, title: string) {
+    if (this.tasks()[index].completed) { return; }
+
+    this.updateTaskCtrl.setValue(title);
+
+    this.tasks.update(tasks => {
+      return tasks.map((task, i) => ({
+        ...task,
+        editing: i === index
+      }));
+    });
   }
 }
