@@ -1,22 +1,50 @@
-import { JsonPipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, inject, Injector, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Task } from '../../models/task';
+import { Task, TaskFilter } from '../../models/task';
 
 @Component({
   selector: 'app-home',
-  imports: [JsonPipe, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
-  tasks = signal<Task[]>([
-    { id: 1, title: "Aprender Angular", completed: false },
-    { id: 2, title: "Aprender TypeScript", completed: false },
-    { id: 3, title: "Aprender JavaScript", completed: false },
-    { id: 4, title: "Aprender HTML", completed: false },
-    { id: 5, title: "Aprender CSS", completed: false }
-  ]);
+  TaskFilter = TaskFilter;
+
+  injector = inject(Injector);
+
+   ngOnInit() {
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      this.tasks.set(JSON.parse(storedTasks));
+    }
+    this.trackTasks();
+  }
+
+  trackTasks(){
+    effect(() => {
+      const tasks = this.tasks();
+      console.log('Tareas actualizadas:', tasks);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, { injector: this.injector });
+  }
+
+  filter = signal<TaskFilter>(TaskFilter.All);
+
+  taskFiltered = computed(() => {
+    const filter = this.filter();
+    const tasks = this.tasks();
+    switch (filter) {
+      case TaskFilter.Pending:
+        return tasks.filter(task => !task.completed);
+      case TaskFilter.Completed:
+        return tasks.filter(task => task.completed);
+      default:
+        return tasks;
+    }
+  });
+
+  tasks = signal<Task[]>([]);
 
   newTaskCtrl = new FormControl('',
     {
@@ -86,5 +114,9 @@ export class Home {
         editing: i === index
       }));
     });
+  }
+
+  changeFilter(filter: TaskFilter) {
+    this.filter.set(filter);
   }
 }
